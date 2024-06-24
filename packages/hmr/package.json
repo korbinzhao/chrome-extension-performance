@@ -1,5 +1,5 @@
 {
-  "name": "@chrome-extension-boilerplate/hmr",
+  "name": "@chrome-extension-matter-perf/hmr",
   "version": "0.0.1",
   "description": "chrome extension hot module reload or refresh",
   "private": true,
@@ -25,7 +25,7 @@
     "ws": "8.17.1"
   },
   "devDependencies": {
-    "@chrome-extension-boilerplate/tsconfig": "workspace:*",
+    "@chrome-extension-matter-perf/tsconfig": "workspace:*",
     "@rollup/plugin-sucrase": "^5.0.2",
     "@types/ws": "^8.5.10",
     "esm": "^3.2.25",

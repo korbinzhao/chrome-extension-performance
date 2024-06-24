@@ -19,13 +19,13 @@
   "type": "module",
   "dependencies": {
     "webextension-polyfill": "^0.12.0",
-    "@chrome-extension-boilerplate/shared": "workspace:*",
-    "@chrome-extension-boilerplate/storage": "workspace:*"
+    "@chrome-extension-matter-perf/shared": "workspace:*",
+    "@chrome-extension-matter-perf/storage": "workspace:*"
   },
   "devDependencies": {
-    "@chrome-extension-boilerplate/dev-utils": "workspace:*",
-    "@chrome-extension-boilerplate/hmr": "workspace:*",
-    "@chrome-extension-boilerplate/tsconfig": "workspace:*",
+    "@chrome-extension-matter-perf/dev-utils": "workspace:*",
+    "@chrome-extension-matter-perf/hmr": "workspace:*",
+    "@chrome-extension-matter-perf/tsconfig": "workspace:*",
     "@laynezh/vite-plugin-lib-assets": "^0.5.21",
     "@types/ws": "^8.5.10",
     "magic-string": "^0.30.10",

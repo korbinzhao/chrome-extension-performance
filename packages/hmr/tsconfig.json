@@ -1,5 +1,5 @@
 {
-  "extends": "@chrome-extension-boilerplate/tsconfig/utils",
+  "extends": "@chrome-extension-matter-perf/tsconfig/utils",
   "compilerOptions": {
     "outDir": "dist"
   },

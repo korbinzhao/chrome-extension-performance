@@ -1,4 +1,5 @@
 import { createStorage, StorageType, type BaseStorage, SessionAccessLevel } from './base';
 import { exampleThemeStorage } from './exampleThemeStorage';
+import { performanceStorage } from './performanceStorage';
 
-export { exampleThemeStorage, createStorage, StorageType, SessionAccessLevel, BaseStorage };
+export { exampleThemeStorage, performanceStorage, createStorage, StorageType, SessionAccessLevel, BaseStorage };

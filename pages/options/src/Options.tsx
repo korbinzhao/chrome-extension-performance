@@ -1,6 +1,6 @@
 import '@src/Options.css';
-import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
+import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-matter-perf/shared';
+import { exampleThemeStorage } from '@chrome-extension-matter-perf/storage';
 import { ComponentPropsWithoutRef } from 'react';
 
 const Options = () => {

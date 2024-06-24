@@ -1,49 +1,66 @@
+import { withErrorBoundary, withSuspense } from '@chrome-extension-matter-perf/shared';
+import { ConfigProvider, Button } from 'antd';
+import Topbar from './components/Topbar';
+import UserInput from './components/UserInput/index';
+import AnalysisResult from './components/AnalysisResult/index';
+// import usePort from './hooks/usePort';
+// import { performanceStorage } from '@chrome-extension-matter-perf/storage';
+
 import '@src/Panel.css';
-import { useStorageSuspense, withErrorBoundary, withSuspense } from '@chrome-extension-boilerplate/shared';
-import { exampleThemeStorage } from '@chrome-extension-boilerplate/storage';
-import { ComponentPropsWithoutRef } from 'react';
+import { useEffect } from 'react';
+
+let port = chrome.runtime.connect({ name: 'devtools' });
+
+port.onDisconnect.addListener(function () {
+  console.warn('port disconnect');
+  // 重连
+  port = chrome.runtime.connect({ name: 'devtools' });
+});
+
+console.log('this is panel log');
 
 const Panel = () => {
-  const theme = useStorageSuspense(exampleThemeStorage);
+  // const { postMessage } = usePort();
+
+  useEffect(() => {
+    // Listen for messages from the background script
+    port.onMessage.addListener(message => {
+      // if (message.type === 'updatePanel') {
+      // Update the panel with the received performance data
+      // updatePanel(message.data);
+      console.log('panel onMessage', message);
+      // }
+    });
+  }, []);
 
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor: theme === 'light' ? '#eee' : '#222',
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#000',
+        },
       }}>
-      <header className="App-header" style={{ color: theme === 'light' ? '#222' : '#eee' }}>
-        <img src={chrome.runtime.getURL('devtools-panel/logo.svg')} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>pages/devtools-panel/src/Panel.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: theme === 'light' ? '#0281dc' : undefined, marginBottom: '10px' }}>
-          Learn React!
-        </a>
-        <ToggleButton>Toggle theme</ToggleButton>
-      </header>
-    </div>
-  );
-};
+      <Topbar />
+      <div className="p-8">
+        <UserInput />
+        <Button
+          onClick={async () => {
+            console.log('send message in Panel');
 
-const ToggleButton = (props: ComponentPropsWithoutRef<'button'>) => {
-  const theme = useStorageSuspense(exampleThemeStorage);
-  return (
-    <button
-      className={
-        props.className +
-        ' ' +
-        'font-bold mt-4 py-1 px-4 rounded shadow hover:scale-105 ' +
-        (theme === 'light' ? 'bg-white text-black' : 'bg-black text-white')
-      }
-      onClick={exampleThemeStorage.toggle}>
-      {props.children}
-    </button>
+            // const resources = await performanceStorage.get();
+
+            // console.log('resources', resources);
+
+            port.postMessage('hello');
+
+            // postMessage('aaa');
+          }}>
+          Send Message
+        </Button>
+        <div className="border-b"></div>
+        <AnalysisResult />
+      </div>
+    </ConfigProvider>
   );
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "@chrome-extension-boilerplate/content-script",
+  "name": "@chrome-extension-matter-perf/content-script",
   "version": "0.0.1",
   "description": "chrome extension content script",
   "private": true,
@@ -18,11 +18,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@chrome-extension-boilerplate/shared": "workspace:*",
-    "@chrome-extension-boilerplate/storage": "workspace:*"
+    "@chrome-extension-matter-perf/shared": "workspace:*",
+    "@chrome-extension-matter-perf/storage": "workspace:*"
   },
   "devDependencies": {
-    "@chrome-extension-boilerplate/tsconfig": "workspace:*",
-    "@chrome-extension-boilerplate/hmr": "workspace:*"
+    "@chrome-extension-matter-perf/tsconfig": "workspace:*",
+    "@chrome-extension-matter-perf/hmr": "workspace:*"
   }
 }
