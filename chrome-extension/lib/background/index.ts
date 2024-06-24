@@ -1,36 +1,5 @@
-// import 'webextension-polyfill';
-// import { exampleThemeStorage } from '@chrome-extension-matter-perf/storage';
-
-// exampleThemeStorage.get().then(theme => {
-//   console.log('theme', theme);
-// });
-
-// console.log('background loaded');
-// console.log("Edit 'chrome-extension/lib/background/index.ts' and save to reload.");
-
-// import { performanceStorage } from '@chrome-extension-matter-perf/storage';
-
-// const resources = performance.getEntriesByType('resource');
-
-// performanceStorage.set({ resources });
-
-// // Listen for messages from content scripts
-// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-//   // if (message.type === 'performanceData') {
-//     // Forward the data to the DevTools panel
-//     chrome.runtime.sendMessage({
-//       type: 'updatePanel',
-//       data: message.data
-//     });
-//   // }
-// });
-
 let devtoolsPort: chrome.runtime.Port;
 let contentPort: chrome.runtime.Port;
-
-// function postMessageToPanel(msg: string) {
-//   thePort?.postMessage('hello from background: ' + msg);
-// }
 
 const onPort = function (port: chrome.runtime.Port) {
   console.log('--- onPort Connect in playground', port);
@@ -40,8 +9,6 @@ const onPort = function (port: chrome.runtime.Port) {
 
     devtoolsPort.onMessage.addListener(function (msg) {
       console.log('recieve message in playground', msg);
-      // port.postMessage(msg);
-      // chrome.runtime.sendMessage(msg);
       contentPort?.postMessage(msg);
       console.log('send message to content in playground', msg);
     });
@@ -57,10 +24,6 @@ const onPort = function (port: chrome.runtime.Port) {
 };
 
 chrome.runtime.onConnect.addListener(onPort);
-
-// setTimeout(() => {
-//   postMessageToPanel('ccc');
-// }, 1000);
 
 // 关键资源的URL（可以根据实际情况替换）
 const KEY_RESOURCE_URL = 'path/to/your-key-resource.js';

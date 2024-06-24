@@ -3,8 +3,6 @@ import { ConfigProvider, Button } from 'antd';
 import Topbar from './components/Topbar';
 import UserInput from './components/UserInput/index';
 import AnalysisResult from './components/AnalysisResult/index';
-// import usePort from './hooks/usePort';
-// import { performanceStorage } from '@chrome-extension-matter-perf/storage';
 
 import '@src/Panel.css';
 import { useEffect } from 'react';
@@ -20,16 +18,10 @@ port.onDisconnect.addListener(function () {
 console.log('this is panel log');
 
 const Panel = () => {
-  // const { postMessage } = usePort();
-
   useEffect(() => {
     // Listen for messages from the background script
     port.onMessage.addListener(message => {
-      // if (message.type === 'updatePanel') {
-      // Update the panel with the received performance data
-      // updatePanel(message.data);
       console.log('panel onMessage', message);
-      // }
     });
   }, []);
 
@@ -47,13 +39,7 @@ const Panel = () => {
           onClick={async () => {
             console.log('send message in Panel');
 
-            // const resources = await performanceStorage.get();
-
-            // console.log('resources', resources);
-
             port.postMessage('hello');
-
-            // postMessage('aaa');
           }}>
           Send Message
         </Button>
