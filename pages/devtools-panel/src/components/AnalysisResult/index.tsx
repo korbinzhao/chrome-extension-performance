@@ -21,7 +21,7 @@ interface AnalysisResultProps {
 
 const columns = [
   { key: 'no', title: 'no', dataIndex: 'no' },
-  { key: 'name', title: 'name', dataIndex: 'name' },
+  { key: 'name', title: 'name', dataIndex: 'name', width: 300 },
   { key: 'initiatorType', title: 'initiatorType', dataIndex: 'initiatorType' },
   { key: 'startTime', title: 'startTime', dataIndex: 'startTime' },
   { key: 'duration', title: 'duration', dataIndex: 'duration' },
@@ -45,7 +45,7 @@ export default function AnalysisResult({ resources, result }: AnalysisResultProp
           dataSource={resources.map((item, index) => {
             return { ...item, no: index + 1 };
           })}
-          pagination={{ pageSize: 20 }}
+          pagination={{ pageSize: 100 }}
           size="small"
         />
       </div>

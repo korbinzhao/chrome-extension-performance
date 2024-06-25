@@ -12,19 +12,14 @@ window.addEventListener('load', () => {
   port.onMessage.addListener(message => {
     console.log('contentjs onMessage', message);
 
-    const { resourceUrl, timestamp, interfaceUrl } = message.data;
+    if (message.type === 'vcpAnalysis') {
+      const { resourceUrl, timestamp, interfaceUrl } = message.data;
 
-    let data;
+      const data = analysisPerformanceByVCP(resourceUrl, timestamp, interfaceUrl);
 
-    switch (message.type) {
-      case 'vcpAnalysis':
-        data = analysisPerformanceByVCP(resourceUrl, timestamp, interfaceUrl);
-
-        port.postMessage({ type: 'vcp', data });
-        break;
-      case 'getResources':
-        postResources(port);
-        break;
+      port.postMessage({ type: 'vcp', data });
+    } else if (message.type === 'getResources') {
+      postResources(port);
     }
   });
 });
