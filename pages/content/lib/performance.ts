@@ -1,45 +1,62 @@
 let longTasks: PerformanceEntry[] = [];
 
-export function analysisPerformanceByVCP(vcpResourceUrl: string, vcp: number) {
+export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number, interfaceUrl: string) {
   const resources = performance.getEntriesByType('resource');
 
-  const vcpResource = resources.find(resource => resource.name === vcpResourceUrl);
+  const vcpResource = resources.find(resource => resource.name === resourceUrl);
+  const vcpInterface = resources.find(resource => resource.name === interfaceUrl);
 
   if (!vcpResource) {
-    console.warn('Cannot find key resource', vcpResourceUrl);
-    return null;
+    console.warn('Cannot find key resource', resourceUrl);
+    return { resources };
   }
 
   const resourcesBeforeVcpResourceFetch = resources.filter(resource => resource.startTime < vcpResource.startTime);
   const resourcesBetweenVcpResourceLoadAndVcp = resources.filter(resource => {
     const endTime = resource.startTime + resource.duration;
-    if (endTime > vcpResource.startTime + vcpResource.duration && resource.startTime < vcp) {
+    if (endTime > vcpResource.startTime + vcpResource.duration && resource.startTime < timestamp) {
       return true;
     }
     return false;
   });
-
-  // const longTasks = performance.getEntriesByType('longtask');
 
   const longTasksBeforeVcpResourceFetch = longTasks.filter(task => task.startTime < vcpResource.startTime);
   const longTasksBetweenVcpResourceLoadAndVcp = longTasks.filter(task => {
     const endTime = task.startTime + task.duration;
-    if (endTime > vcpResource.startTime + vcpResource.duration && task.startTime < vcp) {
+    if (endTime > vcpResource.startTime + vcpResource.duration && task.startTime < timestamp) {
       return true;
     }
     return false;
   });
 
+  let vcpInterfaceDelayAfterVcpResourceLoad;
+  let vcpDelayAfterVcpInterfaceLoad;
+
+  if (vcpInterface) {
+    vcpInterfaceDelayAfterVcpResourceLoad = vcpInterface.startTime - vcpResource.startTime - vcpResource.duration;
+    vcpDelayAfterVcpInterfaceLoad = timestamp - vcpInterface.startTime - vcpInterface.duration;
+  }
+
   return {
+    vcpTimestamp: timestamp,
     vcpResource,
     resourcesBeforeVcpResourceFetch,
     resourcesBetweenVcpResourceLoadAndVcp,
     longTasksBeforeVcpResourceFetch,
     longTasksBetweenVcpResourceLoadAndVcp,
+    vcpInterfaceDelayAfterVcpResourceLoad,
+    vcpDelayAfterVcpInterfaceLoad,
+    resources,
   };
 }
 
-export function longTaskObserver() {
+export function postResources(port: chrome.runtime.Port) {
+  let resources = performance.getEntriesByType('resource');
+  resources = resources.sort((a, b) => (a.startTime > b.startTime ? 1 : -1));
+  port.postMessage({ type: 'resources', data: resources });
+}
+
+function longTaskObserver() {
   longTasks = [];
 
   const observer = new PerformanceObserver(list => {
@@ -54,3 +71,5 @@ export function longTaskObserver() {
 
   return longTasks;
 }
+
+longTaskObserver();

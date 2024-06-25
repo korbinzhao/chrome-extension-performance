@@ -5,23 +5,28 @@ import UserInput from './components/UserInput/index';
 import AnalysisResult from './components/AnalysisResult/index';
 
 import '@src/Panel.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import usePort from './hooks/usePort';
+import { VcpInfo } from '@src/types/vcp';
 
-let port = chrome.runtime.connect({ name: 'devtools' });
-
-port.onDisconnect.addListener(function () {
-  console.warn('port disconnect');
-  // 重连
-  port = chrome.runtime.connect({ name: 'devtools' });
-});
-
-console.log('this is panel log');
+console.log('this is panel');
 
 const Panel = () => {
+  const port = usePort();
+  const [resources, setResources] = useState([]);
+  const [vcpInfo, setVcpInfo] = useState<VcpInfo>();
+  const [vcpResult, setVcpResult] = useState();
+
   useEffect(() => {
     // Listen for messages from the background script
     port.onMessage.addListener(message => {
       console.log('panel onMessage', message);
+
+      if (message.type === 'resources') {
+        setResources(message.data);
+      } else {
+        setVcpResult(message.data);
+      }
     });
   }, []);
 
@@ -34,17 +39,35 @@ const Panel = () => {
       }}>
       <Topbar />
       <div className="p-8">
-        <UserInput />
-        <Button
-          onClick={async () => {
-            console.log('send message in Panel');
+        <UserInput
+          resources={resources}
+          onChange={info => {
+            setVcpInfo(info);
+          }}
+        />
+        <div>
+          <Button
+            className="mr-2"
+            onClick={async () => {
+              console.log('send message in Panel');
 
-            port.postMessage('hello');
-          }}>
-          Send Message
-        </Button>
-        <div className="border-b"></div>
-        <AnalysisResult />
+              port.postMessage({ type: 'getResources' });
+            }}>
+            拉取资源
+          </Button>
+          <Button
+            type="primary"
+            onClick={async () => {
+              console.log('send message in Panel');
+
+              port.postMessage({ type: 'vcpAnalysis' });
+            }}>
+            分析
+          </Button>
+        </div>
+
+        <div className="border-b my-4"></div>
+        <AnalysisResult resources={resources} result={vcpResult} />
       </div>
     </ConfigProvider>
   );
