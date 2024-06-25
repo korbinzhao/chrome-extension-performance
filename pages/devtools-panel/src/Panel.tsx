@@ -19,13 +19,13 @@ const Panel = () => {
 
   useEffect(() => {
     // Listen for messages from the background script
-    port.onMessage.addListener(message => {
-      console.log('panel onMessage', message);
+    port.onMessage.addListener(msg => {
+      console.log('panel onMessage', msg);
 
-      if (message.type === 'resources') {
-        setResources(message.data);
-      } else {
-        setVcpResult(message.data);
+      if (msg.type === 'resources') {
+        setResources(msg.data);
+      } else if (msg.type === 'vcp') {
+        setVcpResult(msg.data);
       }
     });
   }, []);
@@ -60,7 +60,7 @@ const Panel = () => {
             onClick={async () => {
               console.log('send message in Panel');
 
-              port.postMessage({ type: 'vcpAnalysis' });
+              port.postMessage({ type: 'vcpAnalysis', data: vcpInfo });
             }}>
             分析
           </Button>

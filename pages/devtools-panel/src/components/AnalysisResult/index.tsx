@@ -1,4 +1,6 @@
 import { Table } from 'antd';
+import JsonView from 'react18-json-view';
+import 'react18-json-view/src/style.css';
 
 interface Resource {
   name: string;
@@ -31,15 +33,21 @@ const columns = [
 export default function AnalysisResult({ resources, result }: AnalysisResultProps) {
   return (
     <div>
-      <div className="text-lg mb-2">Resources:</div>
-      <Table
-        columns={columns}
-        dataSource={resources.map((item, index) => {
-          return { ...item, no: index + 1 };
-        })}
-        pagination={{ pageSize: 20 }}
-        size="small"
-      />
+      <div>
+        <div className="text-lg mb-2 font-medium">Result:</div>
+        <JsonView className="h-[300px] overflow-y-auto" src={result} />
+      </div>
+      <div>
+        <div className="text-lg mb-2 font-medium">Resources:</div>
+        <Table
+          columns={columns}
+          dataSource={resources.map((item, index) => {
+            return { ...item, no: index + 1 };
+          })}
+          pagination={{ pageSize: 20 }}
+          size="small"
+        />
+      </div>
     </div>
   );
 }

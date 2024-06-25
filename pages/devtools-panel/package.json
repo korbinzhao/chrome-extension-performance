@@ -20,7 +20,8 @@
   "dependencies": {
     "@chrome-extension-matter-perf/shared": "workspace:*",
     "@chrome-extension-matter-perf/storage": "workspace:*",
-    "antd": "^5.18.3"
+    "antd": "^5.18.3",
+    "react18-json-view": "^0.2.8"
   },
   "devDependencies": {
     "@chrome-extension-matter-perf/hmr": "workspace:*",
