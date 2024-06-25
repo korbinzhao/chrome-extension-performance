@@ -8,7 +8,7 @@ export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number,
 
   if (!vcpResource) {
     console.warn('Cannot find key resource', resourceUrl);
-    return { resources };
+    return { resources, message: `Cannot find key resource: ${resourceUrl}` };
   }
 
   const resourcesBeforeVcpResourceFetch = resources.filter(resource => resource.startTime < vcpResource.startTime);

@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
   port.onMessage.addListener(message => {
     console.log('contentjs onMessage', message);
 
-    const { resourceUrl, timestamp, interfaceUrl } = message;
+    const { resourceUrl, timestamp, interfaceUrl } = message.data;
 
     let data;
 
