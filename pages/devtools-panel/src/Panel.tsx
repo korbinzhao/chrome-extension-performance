@@ -1,5 +1,5 @@
 import { withErrorBoundary, withSuspense } from '@chrome-extension-matter-perf/shared';
-import { ConfigProvider, Button } from 'antd';
+import { ConfigProvider, Button, message } from 'antd';
 import Topbar from './components/Topbar';
 import UserInput from './components/UserInput/index';
 import AnalysisResult from './components/AnalysisResult/index';
@@ -21,6 +21,8 @@ const Panel = () => {
     // Listen for messages from the background script
     port.onMessage.addListener(msg => {
       console.log('panel onMessage', msg);
+
+      message.info(`message recieved: ${msg.type}`);
 
       if (msg.type === 'resources') {
         setResources(msg.data);
@@ -52,6 +54,7 @@ const Panel = () => {
               console.log('send message in Panel');
 
               port.postMessage({ type: 'getResources' });
+              message.info(`message send: getResources`);
             }}>
             拉取资源
           </Button>
@@ -61,6 +64,7 @@ const Panel = () => {
               console.log('send message in Panel');
 
               port.postMessage({ type: 'vcpAnalysis', data: vcpInfo });
+              message.info(`message send: vcpAnalysis`);
             }}>
             分析
           </Button>
