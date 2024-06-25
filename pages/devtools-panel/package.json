@@ -20,12 +20,20 @@
   "dependencies": {
     "@chrome-extension-matter-perf/shared": "workspace:*",
     "@chrome-extension-matter-perf/storage": "workspace:*",
+    "react": "^18.3.0",
+    "react-dom": "^18.2.0",
     "antd": "^5.18.3",
-    "react18-json-view": "^0.2.8"
+    "react-json-view": "^1.21.3"
   },
   "devDependencies": {
     "@chrome-extension-matter-perf/hmr": "workspace:*",
     "@chrome-extension-matter-perf/tailwindcss-config": "workspace:*",
     "@chrome-extension-matter-perf/tsconfig": "workspace:*"
+  },
+  "overrides": {
+    "react-json-view": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   }
 }

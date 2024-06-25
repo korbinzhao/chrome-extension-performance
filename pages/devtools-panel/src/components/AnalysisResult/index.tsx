@@ -1,6 +1,5 @@
 import { Table } from 'antd';
-import JsonView from 'react18-json-view';
-import 'react18-json-view/src/style.css';
+import JsonView from 'react-json-view';
 
 interface Resource {
   name: string;
@@ -35,7 +34,9 @@ export default function AnalysisResult({ resources, result }: AnalysisResultProp
     <div>
       <div>
         <div className="text-lg mb-2 font-medium">Result:</div>
-        <JsonView className="h-[300px] overflow-y-auto" src={result} />
+        <div className="h-[800px] overflow-y-auto">
+          <JsonView src={result || {}} collapsed />
+        </div>
       </div>
       <div>
         <div className="text-lg mb-2 font-medium">Resources:</div>
