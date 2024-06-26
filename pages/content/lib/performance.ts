@@ -2,6 +2,8 @@ import cache from './cache';
 
 let longTasks: PerformanceEntry[] = [];
 
+let resourcesObserved = [];
+
 export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number, interfaceUrl: string) {
   // const resources = performance.getEntriesByType('resource');
   const resources = cache.get('resources') || performance.getEntriesByType('resource');
@@ -40,9 +42,23 @@ export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number,
     vcpDelayAfterVcpInterfaceLoad = timestamp - vcpInterface.startTime - vcpInterface.duration;
   }
 
+  const timing = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+
   return {
     vcpTimestamp: timestamp,
     vcpResource,
+    vcpInterface,
+    stages: {
+      ttfb: timing.responseStart,
+      vcpResourceDelay: vcpResource.startTime - timing.responseStart,
+      vcpResourceDuration: vcpResource.duration,
+      vcpInterfaceDelay: vcpInterface?.startTime
+        ? vcpInterface?.startTime - vcpResource.startTime - vcpResource.duration
+        : null,
+      vcpInterfaceDuration: vcpInterface?.duration,
+      vcpDelay: vcpInterface?.startTime ? timestamp - vcpInterface.startTime - vcpInterface.duration : null,
+    },
+    timing,
     resourcesBeforeVcpResourceFetch,
     resourcesBetweenVcpResourceLoadAndVcp,
     longTasksBeforeVcpResourceFetch,
@@ -77,3 +93,16 @@ function longTaskObserver() {
 }
 
 longTaskObserver();
+
+function resourcesObserver() {
+  resourcesObserved = [];
+  const observer = new PerformanceObserver(list => {
+    list.getEntries().forEach(entry => {
+      console.log('--- resource ---', entry?.name);
+      resourcesObserved.push(entry);
+    });
+  });
+  observer.observe({ type: 'resource', buffered: true });
+}
+
+resourcesObserver();

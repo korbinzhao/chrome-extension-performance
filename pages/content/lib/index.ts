@@ -24,5 +24,5 @@ window.addEventListener('load', () => {
     const resources = performance.getEntriesByType('resource');
     cache.set('resources', resources);
     postResources(port);
-  }, 1000);
+  }, 2000);
 });
