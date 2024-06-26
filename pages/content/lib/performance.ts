@@ -1,4 +1,5 @@
 import cache from './cache';
+import { message } from 'antd';
 
 let longTasks: PerformanceEntry[] = [];
 
@@ -45,6 +46,8 @@ export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number,
   const timing = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
 
   return {
+    version: 'v1',
+    message: !vcpInterface ? `vcp 接口不存在: ${interfaceUrl}` : 'success',
     vcpTimestamp: timestamp,
     vcpResource,
     vcpInterface,
