@@ -1,7 +1,10 @@
+import cache from './cache';
+
 let longTasks: PerformanceEntry[] = [];
 
 export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number, interfaceUrl: string) {
-  const resources = performance.getEntriesByType('resource');
+  // const resources = performance.getEntriesByType('resource');
+  const resources = cache.get('resources') || performance.getEntriesByType('resource');
 
   const vcpResource = resources.find(resource => resource.name === resourceUrl);
   const vcpInterface = resources.find(resource => resource.name === interfaceUrl);
@@ -51,7 +54,8 @@ export function analysisPerformanceByVCP(resourceUrl: string, timestamp: number,
 }
 
 export function postResources(port: chrome.runtime.Port) {
-  let resources = performance.getEntriesByType('resource');
+  // let resources = performance.getEntriesByType('resource');
+  let resources = cache.get('resources') || performance.getEntriesByType('resource');
   resources = resources.sort((a, b) => (a.startTime > b.startTime ? 1 : -1));
   port.postMessage({ type: 'resources', data: resources });
 }

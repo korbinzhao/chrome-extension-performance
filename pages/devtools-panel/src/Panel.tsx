@@ -18,6 +18,8 @@ const Panel = () => {
   const [vcpResult, setVcpResult] = useState();
 
   useEffect(() => {
+    message.info('addListener to Port');
+
     // Listen for messages from the background script
     port.onMessage.addListener(msg => {
       console.log('panel onMessage', msg);
@@ -30,7 +32,7 @@ const Panel = () => {
         setVcpResult(msg.data);
       }
     });
-  }, []);
+  }, [port]);
 
   return (
     <ConfigProvider
