@@ -4,7 +4,7 @@ import cache from './cache';
 const port = chrome.runtime.connect({ name: 'content' });
 
 port.onMessage.addListener(message => {
-  console.log('contentjs onMessage', message);
+  console.log('contentjs onMessage2', message);
 
   if (message.type === 'vcpAnalysis') {
     const { resourceUrl, timestamp, interfaceUrl } = message.data;

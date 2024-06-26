@@ -6,13 +6,24 @@ import AnalysisResult from './components/AnalysisResult/index';
 
 import '@src/Panel.css';
 import { useEffect, useState } from 'react';
-import usePort from './hooks/usePort';
 import { VcpInfo } from '@src/types/vcp';
 
-console.log('this is panel');
+const DEFAULT_PORT = chrome.runtime.connect({ name: 'devtools' });
 
 const Panel = () => {
-  const port = usePort();
+  const [port, setPort] = useState(DEFAULT_PORT);
+
+  useEffect(() => {
+    port.onDisconnect.addListener(() => {
+      console.warn('Port disconnect', port);
+      message.info('Port disconnect');
+      const _port = chrome.runtime.connect({ name: 'devtools' });
+      setPort(_port);
+    });
+  }, [port]);
+
+  console.log('this is panel', port);
+
   const [resources, setResources] = useState([]);
   const [vcpInfo, setVcpInfo] = useState<VcpInfo>();
   const [vcpResult, setVcpResult] = useState();
